@@ -1,0 +1,316 @@
+﻿<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Módulo 4 — Extensões Essenciais no VS Code | Treinamento Playwright</title>
+  <style>
+    :root {
+      --bg: #0f1117;
+      --bg2: #161b22;
+      --bg3: #21262d;
+      --border: #30363d;
+      --text: #e6edf3;
+      --muted: #8b949e;
+      --blue: #388bfd;
+      --blue-dim: #1f3557;
+      --green: #3fb950;
+      --green-dim: #1a3a24;
+      --yellow: #d29922;
+      --yellow-dim: #2d2209;
+      --purple: #bc8cff;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; min-height: 100vh; }
+
+    /* ── Gate ── */
+    #gate {
+      display: flex; align-items: center; justify-content: center;
+      min-height: 100vh; padding: 24px;
+    }
+    .gate-box {
+      background: var(--bg2); border: 1px solid var(--border);
+      border-radius: 16px; padding: 48px 40px; max-width: 440px; width: 100%; text-align: center;
+    }
+    .gate-icon { font-size: 48px; margin-bottom: 16px; }
+    .gate-box h2 { font-size: 22px; margin-bottom: 8px; }
+    .gate-box p { color: var(--muted); font-size: 14px; margin-bottom: 24px; }
+    .gate-btn {
+      display: inline-block; background: var(--blue); color: #fff;
+      padding: 12px 28px; border-radius: 8px; text-decoration: none;
+      font-weight: 600; font-size: 15px; transition: opacity 0.2s;
+    }
+    .gate-btn:hover { opacity: 0.85; }
+
+    /* ── Layout ── */
+    #content { display: none; }
+    .topbar {
+      background: var(--bg2); border-bottom: 1px solid var(--border);
+      padding: 0 24px; display: flex; align-items: center; gap: 16px;
+      height: 56px; position: sticky; top: 0; z-index: 100;
+    }
+    .topbar-logo { font-size: 20px; }
+    .topbar-title { font-size: 14px; color: var(--muted); flex: 1; }
+    .topbar-title strong { color: var(--text); }
+    .home-link {
+      color: var(--blue); font-size: 13px; text-decoration: none;
+      border: 1px solid var(--border); padding: 5px 12px; border-radius: 6px;
+      transition: background 0.2s;
+    }
+    .home-link:hover { background: var(--bg3); }
+
+    .container { max-width: 860px; margin: 0 auto; padding: 40px 24px 80px; }
+
+    .module-header {
+      background: linear-gradient(135deg, var(--blue-dim), var(--bg2));
+      border: 1px solid var(--blue); border-radius: 12px;
+      padding: 32px; margin-bottom: 40px;
+    }
+    .module-badge {
+      display: inline-block; background: var(--blue); color: #fff;
+      font-size: 11px; font-weight: 700; padding: 3px 10px;
+      border-radius: 20px; letter-spacing: 1px; margin-bottom: 12px;
+    }
+    .module-header h1 {
+      font-size: 28px; font-weight: 700; margin-bottom: 8px;
+      display: flex; align-items: center; gap: 12px;
+    }
+    .module-header .subtitle { color: var(--muted); font-size: 15px; }
+
+    /* ── Content styles ── */
+    .content h2 {
+      font-size: 20px; font-weight: 600; margin: 36px 0 16px;
+      padding-bottom: 8px; border-bottom: 1px solid var(--border); color: var(--text);
+    }
+    .content h2:first-child { margin-top: 0; }
+    .content p { color: #cdd5e0; line-height: 1.7; margin-bottom: 16px; font-size: 15px; }
+    .content ul { padding-left: 20px; margin-bottom: 16px; }
+    .content ul li { color: #cdd5e0; line-height: 1.8; font-size: 15px; }
+    .content a.link { color: var(--blue); text-decoration: none; }
+    .content a.link:hover { text-decoration: underline; }
+    .content code {
+      background: var(--bg3); border: 1px solid var(--border);
+      padding: 2px 6px; border-radius: 4px; font-family: 'Fira Code', 'Consolas', monospace;
+      font-size: 13px; color: var(--purple);
+    }
+    .content strong { color: var(--text); }
+
+    .section-divider { border: none; border-top: 1px solid var(--border); margin: 32px 0; }
+
+    .code-block {
+      position: relative; background: #010409; border: 1px solid var(--border);
+      border-radius: 8px; margin: 16px 0 24px; overflow: hidden;
+    }
+    .code-block pre { padding: 20px; overflow-x: auto; }
+    .code-block code {
+      background: none; border: none; padding: 0; color: #e6edf3;
+      font-family: 'Fira Code', 'Consolas', monospace; font-size: 13px;
+      line-height: 1.6; white-space: pre;
+    }
+    .copy-btn {
+      position: absolute; top: 10px; right: 10px;
+      background: var(--bg3); border: 1px solid var(--border); color: var(--muted);
+      padding: 4px 10px; border-radius: 6px; font-size: 11px; cursor: pointer;
+      transition: all 0.2s;
+    }
+    .copy-btn:hover { background: var(--border); color: var(--text); }
+    .copy-btn.copied { color: var(--green); border-color: var(--green); }
+
+    .tip-box {
+      display: flex; gap: 12px; background: var(--yellow-dim);
+      border: 1px solid var(--yellow); border-radius: 8px;
+      padding: 16px; margin: 20px 0; font-size: 14px; color: #e6c77a;
+    }
+    .tip-icon { font-size: 18px; flex-shrink: 0; }
+
+    .ext-card {
+      background: var(--bg2); border: 1px solid var(--border);
+      border-radius: 8px; padding: 16px 20px; margin: 16px 0;
+    }
+    .ext-header {
+      display: flex; align-items: center; gap: 10px;
+      margin-bottom: 10px; font-weight: 600; font-size: 15px;
+    }
+    .ext-badge {
+      background: var(--bg3); border: 1px solid var(--border);
+      color: var(--muted); font-size: 11px; padding: 2px 8px; border-radius: 4px;
+    }
+    .ext-card ul { margin-bottom: 0; }
+    .ext-card p { margin-bottom: 0; color: var(--muted); font-size: 14px; }
+
+    .config-table { width: 100%; border-collapse: collapse; margin: 16px 0 24px; font-size: 14px; }
+    .config-table td { padding: 10px 14px; border: 1px solid var(--border); }
+    .config-table tr:nth-child(even) td { background: var(--bg2); }
+    .config-table td:first-child { font-family: monospace; color: var(--purple); white-space: nowrap; }
+    .config-table td:last-child { color: var(--muted); }
+
+    /* ── Navigation ── */
+    .nav-footer {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-top: 60px; padding-top: 24px; border-top: 1px solid var(--border);
+      gap: 16px;
+    }
+    .nav-btn {
+      display: flex; align-items: center; gap: 8px;
+      background: var(--bg2); border: 1px solid var(--border);
+      color: var(--text); text-decoration: none; padding: 12px 20px;
+      border-radius: 8px; font-size: 14px; transition: all 0.2s; min-width: 140px;
+    }
+    .nav-btn:hover { background: var(--bg3); border-color: var(--blue); }
+    .nav-btn.next { justify-content: flex-end; background: var(--blue-dim); border-color: var(--blue); }
+    .nav-btn.disabled { opacity: 0.3; pointer-events: none; }
+    .nav-btn .nav-dir { font-size: 11px; color: var(--muted); display: block; }
+    .nav-btn .nav-label { font-weight: 600; }
+    .nav-center { color: var(--muted); font-size: 13px; text-align: center; }
+  </style>
+</head>
+<body>
+
+<!-- Gate: redireciona para index se não verificado -->
+<div id="gate">
+  <div class="gate-box">
+    <div class="gate-icon">🔒</div>
+    <h2>Acesso Restrito</h2>
+    <p>Este conteúdo é exclusivo para quem verificou o e-mail na página inicial.</p>
+    <a href="../index.html" class="gate-btn">Ir para o início →</a>
+  </div>
+</div>
+
+<!-- Conteúdo principal -->
+<div id="content">
+  <nav class="topbar">
+    <span class="topbar-logo">🎭</span>
+    <span class="topbar-title">Treinamento Playwright &rsaquo; <strong>Módulo 4 — Extensões Essenciais no VS Code</strong></span>
+    <a href="../index.html" class="home-link">← Início</a>
+  </nav>
+
+  <div class="container">
+    <div class="module-header">
+      <div class="module-badge">MÓDULO 4 DE 12</div>
+      <h1><span>🔌</span> Extensões Essenciais no VS Code</h1>
+      <p class="subtitle">Treinamento Playwright — Do Zero ao Primeiro Teste</p>
+    </div>
+
+    <div class="content">
+      
+<p>As extensões certas no VS Code fazem toda a diferença na produtividade. Para instalar qualquer extensão, acesse o painel com:</p>
+
+<div class="code-block">
+  <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+  <pre><code># Windows / Linux
+Ctrl + Shift + X
+
+# macOS
+Cmd + Shift + X</code></pre>
+</div>
+
+<p>Pesquise pelo nome ou ID da extensão e clique em <strong>"Install"</strong>.</p>
+
+<hr class="section-divider">
+
+<h2>1. Playwright Test for VS Code</h2>
+<div class="ext-card">
+  <div class="ext-header">
+    <span class="ext-badge">Microsoft</span>
+    <code>ms-playwright.playwright</code>
+  </div>
+  <ul>
+    <li>Executa testes diretamente pelo painel lateral do VS Code</li>
+    <li>Destaca testes com falha e sucesso com cores</li>
+    <li>Permite rodar um teste individual com um clique</li>
+    <li>Abre o Playwright UI Mode sem precisar do terminal</li>
+    <li>Exibe o relatório de erros diretamente no editor</li>
+  </ul>
+</div>
+
+<h2>2. ESLint</h2>
+<div class="ext-card">
+  <div class="ext-header">
+    <span class="ext-badge">Microsoft</span>
+    <code>dbaeumer.vscode-eslint</code>
+  </div>
+  <ul>
+    <li>Analisa o código em tempo real e aponta erros de padrão</li>
+    <li>Garante consistência no estilo de escrita dos testes</li>
+    <li>Integra com regras de TypeScript</li>
+  </ul>
+</div>
+
+<h2>3. Prettier — Code Formatter</h2>
+<div class="ext-card">
+  <div class="ext-header">
+    <span class="ext-badge">Prettier</span>
+    <code>esbenp.prettier-vscode</code>
+  </div>
+  <ul>
+    <li>Formata automaticamente o código ao salvar o arquivo</li>
+    <li>Mantém indentação, espaçamento e estilo padronizados</li>
+    <li>Funciona com TypeScript, JSON e outros formatos do projeto</li>
+  </ul>
+</div>
+
+<h2>4. GitLens — Git supercharged</h2>
+<div class="ext-card">
+  <div class="ext-header">
+    <span class="ext-badge">GitKraken</span>
+    <code>eamodio.gitlens</code>
+  </div>
+  <ul>
+    <li>Mostra o histórico de alterações linha por linha</li>
+    <li>Facilita a visualização de branches e commits</li>
+    <li>Essencial para trabalhar em equipe com controle de versão</li>
+  </ul>
+</div>
+
+<h2>5. Path Intellisense</h2>
+<div class="ext-card">
+  <div class="ext-header">
+    <span class="ext-badge">Christian Kohler</span>
+    <code>christian-kohler.path-intellisense</code>
+  </div>
+  <ul>
+    <li>Autocompleta caminhos de arquivos ao escrever imports</li>
+    <li>Evita erros de digitação em paths relativos nos testes</li>
+  </ul>
+</div>
+
+    </div>
+
+    <div class="nav-footer">
+      <a href="modulo-3.html" class="nav-btn prev">
+        <span>←</span>
+        <span><span class="nav-dir">Módulo anterior</span><span class="nav-label">Instalando o VS Code</span></span>
+      </a>
+      <div class="nav-center">Módulo 4 de 12</div>
+      <a href="modulo-5.html" class="nav-btn next">
+        <span><span class="nav-dir">Próximo módulo</span><span class="nav-label">Instalando o Node.js</span></span>
+        <span>→</span>
+      </a>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Verifica se o usuário passou pelo gate de e-mail
+  function checkAccess() {
+    const verified = localStorage.getItem('pw_verified') === 'true'
+                  || sessionStorage.getItem('pw_verified') === 'true';
+    if (verified) {
+      document.getElementById('gate').style.display = 'none';
+      document.getElementById('content').style.display = 'block';
+    }
+  }
+  checkAccess();
+
+  // Copia código
+  function copyCode(btn) {
+    const code = btn.nextElementSibling.querySelector('code').innerText;
+    navigator.clipboard.writeText(code).then(() => {
+      btn.textContent = 'Copiado!';
+      btn.classList.add('copied');
+      setTimeout(() => { btn.textContent = 'Copiar'; btn.classList.remove('copied'); }, 2000);
+    });
+  }
+</script>
+</body>
+</html>
