@@ -164,6 +164,9 @@
       transition: border-color 0.2s;
     }
     .module:hover { border-color: var(--accent2); }
+    a.module { text-decoration: none; color: inherit; cursor: pointer; }
+    a.module:hover { border-color: var(--accent); background: #1c2333; }
+    a.module:hover .module-info h3 { color: var(--accent); }
     .module-num {
       width: 36px; height: 36px; min-width: 36px;
       border-radius: 8px;
@@ -505,18 +508,18 @@
       <h2>Ementa — 12 módulos</h2>
       <p>O treinamento está organizado em módulos progressivos, do ambiente zerado até os primeiros testes rodando em múltiplos navegadores.</p>
       <div class="curriculum">
-        <div class="module"><div class="module-num">01</div><div class="module-info"><h3>Introdução ao Playwright</h3><p>O que é, por que usar, diferenciais e onde o Playwright é usado no mercado.</p></div><span class="module-tag tag-setup">Setup</span></div>
-        <div class="module"><div class="module-num">02</div><div class="module-info"><h3>Pré-requisitos</h3><p>Sistemas operacionais compatíveis, software necessário e verificação do ambiente.</p></div><span class="module-tag tag-setup">Setup</span></div>
-        <div class="module"><div class="module-num">03</div><div class="module-info"><h3>Instalando o VS Code</h3><p>Download, instalação e configuração do editor recomendado para o projeto.</p></div><span class="module-tag tag-setup">Setup</span></div>
-        <div class="module"><div class="module-num">04</div><div class="module-info"><h3>Extensões Essenciais no VS Code</h3><p>Playwright Test for VS Code, ESLint, Prettier, GitLens e Path Intellisense.</p></div><span class="module-tag tag-setup">Setup</span></div>
-        <div class="module"><div class="module-num">05</div><div class="module-info"><h3>Instalando o Node.js</h3><p>Como baixar a versão LTS, executar o instalador e verificar no terminal.</p></div><span class="module-tag tag-setup">Setup</span></div>
-        <div class="module"><div class="module-num">06</div><div class="module-info"><h3>Criando o Projeto</h3><p>Criação da pasta do projeto, abertura no VS Code e primeiros passos.</p></div><span class="module-tag tag-setup">Setup</span></div>
-        <div class="module"><div class="module-num">07</div><div class="module-info"><h3>Instalando o Playwright</h3><p>Instalação do pacote, download dos navegadores e confirmação da versão.</p></div><span class="module-tag tag-setup">Setup</span></div>
-        <div class="module"><div class="module-num">08</div><div class="module-info"><h3>Estrutura de Pastas do Projeto</h3><p>Como o projeto fica organizado: <code>tests/</code>, <code>playwright-report/</code> e arquivos de config.</p></div><span class="module-tag tag-core">Core</span></div>
-        <div class="module"><div class="module-num">09</div><div class="module-info"><h3>Configuração dos Arquivos</h3><p>Entendendo <code>playwright.config.ts</code>, <code>tsconfig.json</code>, <code>package.json</code> e <code>.gitignore</code>.</p></div><span class="module-tag tag-core">Core</span></div>
-        <div class="module"><div class="module-num">10</div><div class="module-info"><h3>Scripts Disponíveis</h3><p><code>npm test</code>, <code>test:headed</code>, <code>test:ui</code>, <code>test:report</code> e comandos via <code>npx playwright</code>.</p></div><span class="module-tag tag-core">Core</span></div>
-        <div class="module"><div class="module-num">11</div><div class="module-info"><h3>Rodando os Primeiros Testes</h3><p>Executando nos 3 navegadores, interpretando resultados e abrindo o relatório HTML.</p></div><span class="module-tag tag-core">Core</span></div>
-        <div class="module"><div class="module-num">12</div><div class="module-info"><h3>Boas Práticas</h3><p>Organização por funcionalidade, seletores semânticos, Page Object Model e CI/CD.</p></div><span class="module-tag tag-advanced">Avançado</span></div>
+        <a class="module" href="modulo-1.html"><div class="module-num">01</div><div class="module-info"><h3>Introdução ao Playwright</h3><p>O que é, por que usar, diferenciais e onde o Playwright é usado no mercado.</p></div><span class="module-tag tag-setup">Setup</span></a>
+        <a class="module" href="modulo-2.html"><div class="module-num">02</div><div class="module-info"><h3>Pré-requisitos</h3><p>Sistemas operacionais compatíveis, software necessário e verificação do ambiente.</p></div><span class="module-tag tag-setup">Setup</span></a>
+        <a class="module" href="modulo-3.html"><div class="module-num">03</div><div class="module-info"><h3>Instalando o VS Code</h3><p>Download, instalação e configuração do editor recomendado para o projeto.</p></div><span class="module-tag tag-setup">Setup</span></a>
+        <a class="module" href="modulo-4.html"><div class="module-num">04</div><div class="module-info"><h3>Extensões Essenciais no VS Code</h3><p>Playwright Test for VS Code, ESLint, Prettier, GitLens e Path Intellisense.</p></div><span class="module-tag tag-setup">Setup</span></a>
+        <a class="module" href="modulo-5.html"><div class="module-num">05</div><div class="module-info"><h3>Instalando o Node.js</h3><p>Como baixar a versão LTS, executar o instalador e verificar no terminal.</p></div><span class="module-tag tag-setup">Setup</span></a>
+        <a class="module" href="modulo-6.html"><div class="module-num">06</div><div class="module-info"><h3>Criando o Projeto</h3><p>Criação da pasta do projeto, abertura no VS Code e primeiros passos.</p></div><span class="module-tag tag-setup">Setup</span></a>
+        <a class="module" href="modulo-7.html"><div class="module-num">07</div><div class="module-info"><h3>Instalando o Playwright</h3><p>Instalação do pacote, download dos navegadores e confirmação da versão.</p></div><span class="module-tag tag-setup">Setup</span></a>
+        <a class="module" href="modulo-8.html"><div class="module-num">08</div><div class="module-info"><h3>Estrutura de Pastas do Projeto</h3><p>Como o projeto fica organizado: <code>tests/</code>, <code>playwright-report/</code> e arquivos de config.</p></div><span class="module-tag tag-core">Core</span></a>
+        <a class="module" href="modulo-9.html"><div class="module-num">09</div><div class="module-info"><h3>Configuração dos Arquivos</h3><p>Entendendo <code>playwright.config.ts</code>, <code>tsconfig.json</code>, <code>package.json</code> e <code>.gitignore</code>.</p></div><span class="module-tag tag-core">Core</span></a>
+        <a class="module" href="modulo-10.html"><div class="module-num">10</div><div class="module-info"><h3>Scripts Disponíveis</h3><p><code>npm test</code>, <code>test:headed</code>, <code>test:ui</code>, <code>test:report</code> e comandos via <code>npx playwright</code>.</p></div><span class="module-tag tag-core">Core</span></a>
+        <a class="module" href="modulo-11.html"><div class="module-num">11</div><div class="module-info"><h3>Rodando os Primeiros Testes</h3><p>Executando nos 3 navegadores, interpretando resultados e abrindo o relatório HTML.</p></div><span class="module-tag tag-core">Core</span></a>
+        <a class="module" href="modulo-12.html"><div class="module-num">12</div><div class="module-info"><h3>Boas Práticas</h3><p>Organização por funcionalidade, seletores semânticos, Page Object Model e CI/CD.</p></div><span class="module-tag tag-advanced">Avançado</span></a>
       </div>
     </section>
 
@@ -748,6 +751,9 @@
 
       if (input === generatedCode) {
         errEl.textContent = '';
+        // Salva verificação para liberar acesso aos módulos
+        localStorage.setItem('pw_verified', 'true');
+        sessionStorage.setItem('pw_verified', 'true');
         // Libera conteúdo
         document.getElementById('stepCode').style.display    = 'none';
         document.getElementById('stepUnlocked').style.display = 'block';
