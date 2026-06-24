@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Treinamento Playwright — Do Zero ao Primeiro Teste</title>
+  <style>
+    :root {
+      --bg: #0f1117;
+      --surface: #1a1d27;
+      --surface2: #22263a;
+      --border: #2e3350;
+      --accent: #2ea043;
+      --accent2: #388bfd;
+      --text: #e6edf3;
+      --text-muted: #8b949e;
+      --tag-bg: #1f2d3d;
+      --tag-text: #58a6ff;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    /* ── HERO ── */
+    .hero {
+      background: linear-gradient(135deg, #0d1117 0%, #1a1d27 50%, #0d1117 100%);
+      border-bottom: 1px solid var(--border);
+      padding: 72px 24px 64px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: -80px; left: 50%;
+      transform: translateX(-50%);
+      width: 600px; height: 600px;
+      background: radial-gradient(circle, rgba(46,160,67,0.08) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .badge {
+      display: inline-block;
+      background: var(--tag-bg);
+      color: var(--tag-text);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      font-size: 13px;
+      padding: 4px 14px;
+      margin-bottom: 24px;
+      letter-spacing: 0.5px;
+    }
+
+    .hero h1 {
+      font-size: clamp(28px, 5vw, 52px);
+      font-weight: 700;
+      letter-spacing: -1px;
+      margin-bottom: 16px;
+      background: linear-gradient(135deg, #e6edf3 0%, #8b949e 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero h1 span {
+      background: linear-gradient(135deg, #2ea043 0%, #3fb950 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero p {
+      font-size: 18px;
+      color: var(--text-muted);
+      max-width: 600px;
+      margin: 0 auto 36px;
+    }
+
+    .hero-meta {
+      display: flex;
+      justify-content: center;
+      gap: 24px;
+      flex-wrap: wrap;
+      font-size: 14px;
+      color: var(--text-muted);
+    }
+
+    .hero-meta span {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .hero-meta .dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: var(--accent);
+      display: inline-block;
+    }
+
+    /* ── CONTAINER ── */
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    /* ── SECTION ── */
+    section {
+      padding: 64px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    section:last-child { border-bottom: none; }
+
+    .section-label {
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 12px;
+    }
+
+    section h2 {
+      font-size: clamp(22px, 3vw, 32px);
+      font-weight: 700;
+      margin-bottom: 16px;
+      letter-spacing: -0.5px;
+    }
+
+    section p {
+      color: var(--text-muted);
+      font-size: 16px;
+      max-width: 700px;
+    }
+
+    /* ── WHY CARDS ── */
+    .why-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 16px;
+      margin-top: 36px;
+    }
+
+    .why-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 24px;
+      transition: border-color 0.2s, transform 0.2s;
+    }
+
+    .why-card:hover {
+      border-color: var(--accent);
+      transform: translateY(-2px);
+    }
+
+    .why-card .icon {
+      font-size: 28px;
+      margin-bottom: 12px;
+    }
+
+    .why-card h3 {
+      font-size: 15px;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+
+    .why-card p {
+      font-size: 13px;
+      color: var(--text-muted);
+      max-width: none;
+    }
+
+    /* ── CURRICULUM ── */
+    .curriculum {
+      margin-top: 40px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .module {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px 24px;
+      display: flex;
+      align-items: flex-start;
+      gap: 18px;
+      transition: border-color 0.2s;
+    }
+
+    .module:hover { border-color: var(--accent2); }
+
+    .module-num {
+      width: 36px;
+      height: 36px;
+      min-width: 36px;
+      border-radius: 8px;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--accent2);
+    }
+
+    .module-info { flex: 1; }
+
+    .module-info h3 {
+      font-size: 15px;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .module-info p {
+      font-size: 13px;
+      color: var(--text-muted);
+      max-width: none;
+    }
+
+    .module-tag {
+      font-size: 11px;
+      font-weight: 600;
+      padding: 3px 10px;
+      border-radius: 20px;
+      white-space: nowrap;
+      align-self: center;
+    }
+
+    .tag-setup {
+      background: rgba(46,160,67,0.15);
+      color: #3fb950;
+      border: 1px solid rgba(46,160,67,0.3);
+    }
+
+    .tag-core {
+      background: rgba(56,139,253,0.15);
+      color: #58a6ff;
+      border: 1px solid rgba(56,139,253,0.3);
+    }
+
+    .tag-advanced {
+      background: rgba(188,140,255,0.15);
+      color: #bc8cff;
+      border: 1px solid rgba(188,140,255,0.3);
+    }
+
+    /* ── PREREQUISITES ── */
+    .prereq-list {
+      margin-top: 32px;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 12px;
+    }
+
+    .prereq-item {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 14px;
+      font-weight: 500;
+    }
+
+    .prereq-item .icon { font-size: 22px; }
+
+    /* ── CTA ── */
+    .cta-section {
+      background: linear-gradient(135deg, rgba(46,160,67,0.08), rgba(56,139,253,0.08));
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 48px;
+      text-align: center;
+      margin: 64px 0;
+    }
+
+    .cta-section h2 {
+      font-size: 26px;
+      margin-bottom: 12px;
+    }
+
+    .cta-section p {
+      color: var(--text-muted);
+      margin: 0 auto 28px;
+      max-width: 500px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 28px;
+      border-radius: 8px;
+      font-size: 15px;
+      font-weight: 600;
+      text-decoration: none;
+      transition: opacity 0.2s, transform 0.2s;
+    }
+
+    .btn:hover { opacity: 0.85; transform: translateY(-1px); }
+
+    .btn-primary {
+      background: var(--accent);
+      color: #fff;
+    }
+
+    .btn-secondary {
+      background: var(--surface2);
+      color: var(--text);
+      border: 1px solid var(--border);
+      margin-left: 12px;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 32px 24px;
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 13px;
+    }
+
+    footer a {
+      color: var(--accent2);
+      text-decoration: none;
+    }
+
+    @media (max-width: 600px) {
+      .hero { padding: 48px 24px 40px; }
+      .cta-section { padding: 32px 24px; }
+      .btn-secondary { margin-left: 0; margin-top: 12px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ── HERO ── -->
+  <div class="hero">
+    <div class="badge">🎭 Treinamento de Automação</div>
+    <h1>Playwright com <span>TypeScript</span></h1>
+    <p>Do zero ao primeiro teste rodando — um guia completo de setup e cenários básicos para quem está começando em automação de testes.</p>
+    <div class="hero-meta">
+      <span><span class="dot"></span> 12 módulos</span>
+      <span><span class="dot"></span> TypeScript + Playwright</span>
+      <span><span class="dot"></span> Do setup ao teste real</span>
+      <span><span class="dot"></span> Por Alessandro Erhardt</span>
+    </div>
+  </div>
+
+  <div class="container">
+
+    <!-- ── O QUE É PLAYWRIGHT ── -->
+    <section>
+      <div class="section-label">Introdução</div>
+      <h2>O que é o Playwright?</h2>
+      <p>
+        O Playwright é um framework de automação de testes end-to-end desenvolvido pela <strong>Microsoft</strong>.
+        Ele permite escrever testes confiáveis para aplicações web que rodam em Chrome, Firefox e Safari
+        com uma única API — sem precisar configurar nada separado para cada navegador.
+      </p>
+      <p style="margin-top: 14px;">
+        Amplamente adotado no mercado de QA e automação, o Playwright se destaca pelo seu suporte nativo
+        ao TypeScript, execução paralela de testes e ferramentas visuais de depuração — tornando-o
+        uma das escolhas mais populares para quem quer aprender automação do jeito certo.
+      </p>
+
+      <div class="why-grid">
+        <div class="why-card">
+          <div class="icon">🌐</div>
+          <h3>Multi-browser nativo</h3>
+          <p>Suporte a Chromium, Firefox e WebKit com a mesma base de código.</p>
+        </div>
+        <div class="why-card">
+          <div class="icon">⚡</div>
+          <h3>Execução paralela</h3>
+          <p>Roda todos os testes em paralelo por padrão — mais velocidade sem configuração extra.</p>
+        </div>
+        <div class="why-card">
+          <div class="icon">⏳</div>
+          <h3>Auto-wait</h3>
+          <p>Espera automaticamente os elementos aparecerem — sem <code>sleep()</code> no código.</p>
+        </div>
+        <div class="why-card">
+          <div class="icon">🟦</div>
+          <h3>TypeScript de primeira classe</h3>
+          <p>Suporte completo sem configuração extra — autocomplete, tipos e intellisense nativos.</p>
+        </div>
+        <div class="why-card">
+          <div class="icon">📊</div>
+          <h3>Relatórios HTML</h3>
+          <p>Gera relatórios visuais detalhados com screenshots e traces automaticamente.</p>
+        </div>
+        <div class="why-card">
+          <div class="icon">🔍</div>
+          <h3>UI Mode para debug</h3>
+          <p>Modo interativo para depurar testes passo a passo com timeline visual.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── PRÉ-REQUISITOS ── -->
+    <section>
+      <div class="section-label">Antes de começar</div>
+      <h2>Pré-requisitos</h2>
+      <p>Você vai precisar dos itens abaixo instalados na sua máquina. O treinamento cobre a instalação de cada um deles.</p>
+
+      <div class="prereq-list">
+        <div class="prereq-item">
+          <span class="icon">🟢</span>
+          <div>
+            <div style="font-size:13px;color:var(--text-muted)">Ambiente</div>
+            Node.js v18+
+          </div>
+        </div>
+        <div class="prereq-item">
+          <span class="icon">💻</span>
+          <div>
+            <div style="font-size:13px;color:var(--text-muted)">Editor</div>
+            VS Code
+          </div>
+        </div>
+        <div class="prereq-item">
+          <span class="icon">🎭</span>
+          <div>
+            <div style="font-size:13px;color:var(--text-muted)">Framework</div>
+            Playwright Test
+          </div>
+        </div>
+        <div class="prereq-item">
+          <span class="icon">🐙</span>
+          <div>
+            <div style="font-size:13px;color:var(--text-muted)">Controle de versão</div>
+            Git (recomendado)
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── EMENTA ── -->
+    <section>
+      <div class="section-label">Conteúdo do treinamento</div>
+      <h2>Ementa — 12 módulos</h2>
+      <p>O treinamento está organizado em módulos progressivos, do ambiente zerado até os primeiros testes rodando em múltiplos navegadores.</p>
+
+      <div class="curriculum">
+
+        <div class="module">
+          <div class="module-num">01</div>
+          <div class="module-info">
+            <h3>Introdução ao Playwright</h3>
+            <p>O que é, por que usar, diferenciais em relação a outras ferramentas e onde o Playwright é usado no mercado.</p>
+          </div>
+          <span class="module-tag tag-setup">Setup</span>
+        </div>
+
+        <div class="module">
+          <div class="module-num">02</div>
+          <div class="module-info">
+            <h3>Pré-requisitos</h3>
+            <p>Sistemas operacionais compatíveis, software necessário e como verificar se o ambiente já está pronto.</p>
+          </div>
+          <span class="module-tag tag-setup">Setup</span>
+        </div>
+
+        <div class="module">
+          <div class="module-num">03</div>
+          <div class="module-info">
+            <h3>Instalando o VS Code</h3>
+            <p>Download, instalação e configuração do editor de código recomendado para o projeto.</p>
+          </div>
+          <span class="module-tag tag-setup">Setup</span>
+        </div>
+
+        <div class="module">
+          <div class="module-num">04</div>
+          <div class="module-info">
+            <h3>Extensões Essenciais no VS Code</h3>
+            <p>Playwright Test for VS Code, ESLint, Prettier, GitLens e Path Intellisense — o que cada uma faz e por que instalar.</p>
+          </div>
+          <span class="module-tag tag-setup">Setup</span>
+        </div>
+
+        <div class="module">
+          <div class="module-num">05</div>
+          <div class="module-info">
+            <h3>Instalando o Node.js</h3>
+            <p>Como baixar a versão LTS, executar o instalador e verificar se o Node e o npm estão corretos no terminal.</p>
+          </div>
+          <span class="module-tag tag-setup">Setup</span>
+        </div>
+
+        <div class="module">
+          <div class="module-num">06</div>
+          <div class="module-info">
+            <h3>Criando o Projeto</h3>
+            <p>Criação da pasta do projeto, abertura no VS Code e primeiros passos com o terminal integrado.</p>
+          </div>
+          <span class="module-tag tag-setup">Setup</span>
+        </div>
+
+        <div class="module">
+          <div class="module-num">07</div>
+          <div class="module-info">
+            <h3>Instalando o Playwright</h3>
+            <p>Instalação do pacote <code>@playwright/test</code>, download dos navegadores e confirmação da versão instalada.</p>
+          </div>
+          <span class="module-tag tag-setup">Setup</span>
+        </div>
+
+        <div class="module">
+          <div class="module-num">08</div>
+          <div class="module-info">
+            <h3>Estrutura de Pastas do Projeto</h3>
+            <p>Como o projeto fica organizado após o setup: <code>tests/</code>, <code>playwright-report/</code>, arquivos de configuração e o que o Git deve ignorar.</p>
+          </div>
+          <span class="module-tag tag-core">Core</span>
+        </div>
+
+        <div class="module">
+          <div class="module-num">09</div>
+          <div class="module-info">
+            <h3>Configuração dos Arquivos</h3>
+            <p>Entendendo <code>playwright.config.ts</code>, <code>tsconfig.json</code>, <code>package.json</code> e <code>.gitignore</code> — com explicação de cada propriedade importante.</p>
+          </div>
+          <span class="module-tag tag-core">Core</span>
+        </div>
+
+        <div class="module">
+          <div class="module-num">10</div>
+          <div class="module-info">
+            <h3>Scripts Disponíveis</h3>
+            <p><code>npm test</code>, <code>test:headed</code>, <code>test:ui</code>, <code>test:report</code> e comandos extras via <code>npx playwright</code>.</p>
+          </div>
+          <span class="module-tag tag-core">Core</span>
+        </div>
+
+        <div class="module">
+          <div class="module-num">11</div>
+          <div class="module-info">
+            <h3>Rodando os Primeiros Testes</h3>
+            <p>Executando os testes de exemplo nos 3 navegadores, interpretando o resultado no terminal e abrindo o relatório HTML.</p>
+          </div>
+          <span class="module-tag tag-core">Core</span>
+        </div>
+
+        <div class="module">
+          <div class="module-num">12</div>
+          <div class="module-info">
+            <h3>Boas Práticas</h3>
+            <p>Organização de testes por funcionalidade, seletores semânticos, testes independentes, Page Object Model e configuração de CI/CD.</p>
+          </div>
+          <span class="module-tag tag-advanced">Avançado</span>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ── CTA ── -->
+    <div class="cta-section">
+      <h2>Pronto para começar?</h2>
+      <p>Acesse o guia completo no Google Docs com todos os detalhes, exemplos de código e passo a passo de cada módulo.</p>
+      <div>
+        <a class="btn btn-primary"
+           href="https://docs.google.com/document/d/13hsEKnX_Lct4qgId434xEM9epuwTnC6uGRYsdphyO-A/edit"
+           target="_blank">
+          📄 Abrir Guia Completo
+        </a>
+        <a class="btn btn-secondary"
+           href="https://github.com/alessandroerhardt/projeto-playright-erhardt"
+           target="_blank">
+          🐙 Ver no GitHub
+        </a>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ── FOOTER ── -->
+  <footer>
+    <p>
+      Feito por <strong>Alessandro Erhardt</strong> · Treinamento Playwright + TypeScript ·
+      <a href="https://playwright.dev" target="_blank">playwright.dev</a>
+    </p>
+  </footer>
+
+</body>
+</html>
