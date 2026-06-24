@@ -660,7 +660,7 @@
       try {
         const res  = await fetch(`https://api.counterapi.dev/v1/${COUNTER_NAMESPACE}/${COUNTER_KEY}/get`);
         const data = await res.json();
-        setCounter(data.value ?? 0);
+        setCounter(data.count ?? data.value ?? 0);
       } catch {
         setCounter('—');
       }
@@ -670,7 +670,7 @@
       try {
         const res  = await fetch(`https://api.counterapi.dev/v1/${COUNTER_NAMESPACE}/${COUNTER_KEY}/up`);
         const data = await res.json();
-        setCounter(data.value ?? 0);
+        setCounter(data.count ?? data.value ?? 0);
       } catch { /* silencioso */ }
     }
 
